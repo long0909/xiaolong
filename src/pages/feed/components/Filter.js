@@ -27,15 +27,6 @@ const TwoColProps = {
 class Filter extends React.Component {
   constructor(props){
     super(props);
-    this.state={value:'null'};
-    this.handleChange=this.handleChange.bind(this);
-    this.handleSubmit=this.handleSubmit.bind(this);
-  }
-  handleChange(event){
-    this.setState({value:event.target.value});
-  }
-  handleSubmit(event){
-    event.preventDefault();
   }
 
   render() {
@@ -44,7 +35,10 @@ class Filter extends React.Component {
       <Form onSubmit={this.handleSubmit}> 
         <Row gutter={24}>
          <Col {...ColProps} xl={{ span: 4 }} md={{ span: 8 }}>
-             <Button type="ghost" onClick={onClick}>
+             <Button type="ghost"    
+             onClick={() => {
+                onClick(1)
+              }}>
                 <Trans>Create</Trans>
               </Button>
       </Col>

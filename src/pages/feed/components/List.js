@@ -10,29 +10,24 @@ class List extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      list: [],
+      //list: [],
     }
   }
   //当组件输出到 DOM 后会执行 componentDidMount()
-
-  componentDidMount() {
-    this.getTableData()
-  }
-
   cancel() {}
   async ok(values) {
     console.log(values)
     result = await axios.post('/api/feed/delete', { feed_id: values.id * 1 })
     this.getTableData()
   }
-  onChange = async (checked) => {
+   onChange = async (checked) => {
     console.log(`switch to ${checked}`)
     const result = await axios.post('/api/feed/update', {
       close_status: checked ? 1 : 0,
     })
     this.getTableData()
   }
-  async getTableData() {
+ async getTableData() {
     const res = await axios.post('/api/feed/list')
     this.setState({
       list: res.data.content.info_list,
@@ -41,7 +36,7 @@ class List extends React.Component {
   }
   render() {
     //开关
-    const { onClick } = this.props
+    const { record, edit  } = this.props
 
     //表格
     const bodyStyle = {
@@ -78,7 +73,7 @@ class List extends React.Component {
           <Space size="middle">
             <a
               onClick={() => {
-                onClick(2)
+               edit(record)
               }}
             >
               Update{' '}
@@ -102,7 +97,7 @@ class List extends React.Component {
 
     return (
       <>
-        <Table columns={columns} dataSource={this.state.list} />
+        <Table columns={columns} dataSource={this.props.list} />
       </>
     )
   }
@@ -115,3 +110,6 @@ List.propTypes = {
 }
 
 export default List
+
+
+  

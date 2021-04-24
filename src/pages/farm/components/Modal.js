@@ -15,7 +15,7 @@ const formItemLayout = {
   },
 }
 
-class FeedModal extends React.Component {
+class FarmModal extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -98,4 +98,4 @@ onFinish = (formData)=>{
 }
 
 
-export default FeedModal
+export default FarmModal

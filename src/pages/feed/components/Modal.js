@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { Form, Input, InputNumber, Radio, Modal, Cascader,TimePicker } from 'antd'
+import { Form, Input, InputNumber, Radio, Modal, Cascader,TimePicker ,Button} from 'antd'
 import { Trans } from "@lingui/macro"
 import { t } from "@lingui/macro"
 import moment from 'moment'
@@ -23,44 +23,59 @@ class FeedModal extends PureComponent {
       visible: false
     }
   }
+  componentDidUpdate(prevProps) {
+    // 典型用法（不要忘记比较 props）：
 
+    const {current} = this.props
+    // console.log(prevProps,this.props.visible !== prevProps.visible,prevProps.type,this.props.type)
+    console.log(!prevProps.visible,this.props.visible,this.props.type)
+    if (!prevProps.visible&&this.props.visible&&this.props.type==2) {
+      setTimeout(()=>{
+    console.log(this.formRef.current)
+    console.log(current)
+        this.formRef.current&&this.formRef.current.setFieldsValue(current);
+      })
 
-  render() {
-    const { visible, onCancel,onOk} = this.props
-   // const showModal = () => {
-     // this.setState(true);
-    //};
-  
-    // const handleOk = () => {
-    //     this.setState(false);
-    // };
-  
-    const handleCancel = () => {
-      this.setState({
-        visible:false
-      });
-    };
-    function onChange(time, timeString) {
-      console.log(time, timeString);
     }
+  }
+  onFinish = (formData)=>{
+    console.log(formData);
+    const { onOk,onCancel } = this.props;
+    onOk(formData);
+    onCancel();
+  }
+  handleCancel = () => {
+    this.setState({
+      visible:false
+    });
+  };
+  onChange(time, timeString) {
+    console.log(time, timeString);
+  }
+  render() {
+    const { onCancel,visible,type,current} = this.props
     return (
-      <Modal visible = {visible} onOk={onOk} onCancel={onCancel}>
-        <Form  name="control-ref" layout="horizontal">
-          <FormItem name='Project' rules={[{ required: true }]}
+      <Modal visible = {visible} onCancel={onCancel} footer={ [] } destroyOnClose>{type}
+        <Form  ref={this.formRef} name="control-ref" layout="horizontal" onFinish={this.onFinish}>
+          <FormItem name='project' rules={[{ required: true }]}
             label={t`Project`} hasFeedback {...formItemLayout}>
             <Input />
           </FormItem>
-          <FormItem name='Time' rules={[{ required: true }]}
+          <FormItem name='time' rules={[{ required: true }]}
             label={t`Time`} hasFeedback {...formItemLayout}>
-            <TimePicker onChange={onChange} defaultOpenValue={moment('00:00:00', 'HH:mm:ss')} />
+            <TimePicker onChange={this.onChange} defaultOpenValue={moment('00:00:00', 'HH:mm:ss')} />
           </FormItem>
-          <FormItem name='Animal' rules={[{ required: true }]}
+          <FormItem name='animal' rules={[{ required: true }]}
             label={t`Animal`} hasFeedback {...formItemLayout}>
              <Input />
           </FormItem>
-          <FormItem name='Feed' rules={[{ required: true }]}
+          <FormItem name='feed' rules={[{ required: true }]}
           label={t`Feed`} hasFeedback {...formItemLayout}>
-            <InputNumber min={1} max={100}/>  kg
+            <InputNumber min={1} max={100} />
+          </FormItem>
+          <FormItem >
+            <Button type="primary" htmlType="submit" >submit</Button>
+            <Button type="ghost" htmlType="submit" onClick={onCancel} >cancel</Button>
           </FormItem>
           </Form>
       </Modal>

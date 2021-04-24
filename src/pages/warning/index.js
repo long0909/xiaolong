@@ -24,12 +24,13 @@ class Warning extends React.Component {
   componentDidMount(){
     this.getTableData();
   }
-  async getTableData(){
-    const res = await axios.post('/api/warning/get');
+  getTableData = async(warn_1)=>{
+    console.log(warn_1, '-cvvv---')
+    const res = await axios.post('/api/warning/get',{table:warn_1});
     this.setState({
-      list:res.data.content.info_list
+      list:res.data.content.warning_info
     })
-    console.log(res.data.content.info_list,'warn');
+    console.log(res.data.content.warning_info,'warn');
   }
 
   showModal() {
