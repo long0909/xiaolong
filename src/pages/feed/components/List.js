@@ -1,98 +1,108 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { t } from "@lingui/macro"
-import { Table, Modal, Avatar,Tag, Space,Switch,Popconfirm } from 'antd'
-
+import { t } from '@lingui/macro'
+import { Table, Modal, Avatar, Tag, Space, Switch, Popconfirm } from 'antd'
+import axios from 'axios'
 
 const { confirm } = Modal
-var ok = ()=>{
-  const { dispatch } = this.props;
+
+class List extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      list: [],
+    }
   }
-  
-  var cancel = ()=>{
-    
+  //当组件输出到 DOM 后会执行 componentDidMount()
+
+  componentDidMount() {
+    this.getTableData()
   }
-class List extends React.Component{
- 
-    render(){
+
+  cancel() {}
+  async ok(values) {
+    console.log(values)
+    result = await axios.post('/api/feed/delete', { feed_id: values.id * 1 })
+    this.getTableData()
+  }
+  onChange = async (checked) => {
+    console.log(`switch to ${checked}`)
+    const result = await axios.post('/api/feed/update', {
+      close_status: checked ? 1 : 0,
+    })
+    this.getTableData()
+  }
+  async getTableData() {
+    const res = await axios.post('/api/feed/list')
+    this.setState({
+      list: res.data.content.info_list,
+    })
+    console.log(res.data.content.info_list, '--')
+  }
+  render() {
     //开关
     const { onClick } = this.props
-    function onChange(checked) {
-      console.log(`switch to ${checked}`);
+
+    //表格
+    const bodyStyle = {
+      bodyStyle: {
+        height: 432,
+        background: '#fff',
+      },
     }
-      //表格
-      const bodyStyle = {
-        bodyStyle: {
-          height: 432,
-          background: '#fff',
-        },
-      }
-      const columns = [
-        {
-          title: 'Project',
-          dataIndex: 'project',
-          key: 'project',
-          render: text => <a>{text}</a>,
-        },
-        {
-          title: 'Time',
-          dataIndex: 'time',
-          key: 'time',
-        },
-        {
-          title: 'Animal',
-          dataIndex: 'animal',
-          key: 'animal',
-        },
-        {
-          title: 'Feed',
-          dataIndex: 'feed',
-          key: 'feed',
-        },
-        {
-          title: 'Action',
-          key: 'action',
-          render: (text, record) => (
-            <Space size="middle" >
-              <a onClick={onClick}>Update </a>
-              <Popconfirm
-                  title="确认删除吗？"
-                  onConfirm={this.ok}
-                  onCancel={this.cancel}
-                  okText="是"
-                  cancelText="否"
-              >
-              <a >Delete</a>
-              </Popconfirm>
-              <Switch defaultChecked onChange={onChange} />
-            </Space>
-          ),
-        },
-      ];
-      
-      const data = [
-        {
-          key: '1',
-          name: 'John Brown',
-          age: 32,
-          address: 'New York No. 1 Lake Park',
-        },
-        {
-          key: '2',
-          name: 'Jim Green',
-          age: 42,
-          address: 'London No. 1 Lake Park',
-        },
-        {
-          key: '3',
-          name: 'Joe Black',
-          age: 32,
-          address: 'Sidney No. 1 Lake Park',
-        },
-      ];
+    const columns = [
+      {
+        title: 'Project',
+        dataIndex: 'project',
+        key: 'project',
+      },
+      {
+        title: 'Time',
+        dataIndex: 'time',
+        key: 'time',
+      },
+      {
+        title: 'Animal',
+        dataIndex: 'animal',
+        key: 'animal',
+      },
+      {
+        title: 'Feed',
+        dataIndex: 'feed',
+        key: 'feed',
+      },
+      {
+        title: 'Action',
+        key: 'action',
+        render: (text, record) => (
+          <Space size="middle">
+            <a
+              onClick={() => {
+                onClick(2)
+              }}
+            >
+              Update{' '}
+            </a>
+            <Popconfirm
+              title="确认删除吗？"
+              onConfirm={(e) => {
+                this.ok(record)
+              }}
+              onCancel={this.cancel}
+              okText="是"
+              cancelText="否"
+            >
+              <a>Delete</a>
+            </Popconfirm>
+            <Switch checked={record.close_status} onChange={this.onChange} />
+          </Space>
+        ),
+      },
+    ]
+
     return (
       <>
-      <Table columns={columns} dataSource={data} />
+        <Table columns={columns} dataSource={this.state.list} />
       </>
     )
   }

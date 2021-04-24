@@ -27,7 +27,7 @@ class WarningModal extends PureComponent {
     const { visible, onCancel,onOk} = this.props
   
     return (
-      <Modal visible = {visible} onOk={onOk} onCancel={onCancel}>
+      <Modal visible = {visible} onOk={onOk} onCancel={onCancel} >
         <Form  name="control-ref" layout="horizontal">
           <FormItem name='CO2' rules={[{ required: true }]}
             label={t`CO2`} hasFeedback {...formItemLayout}>

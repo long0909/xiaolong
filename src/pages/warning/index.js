@@ -7,7 +7,7 @@ import { Table, Tag, Space } from 'antd';
 import {NumberCard} from './components'
 import styles from './index.less'
 import Modal from './components/Modal'
-
+import axios from 'axios'
 
 @connect(({ app, warning, loading }) => ({
 warning, 
@@ -16,13 +16,22 @@ loading,
 class Warning extends React.Component {
   constructor(props) {
     super(props)
-    this.showModal = this.showModal.bind(this)
-    this.handleOk = this.handleOk.bind(this)
-    this.handleCancel = this.handleCancel.bind(this)
     this.state = {
-      visible: false
+      visible: false,
+      list:[]
     }
   }
+  componentDidMount(){
+    this.getTableData();
+  }
+  async getTableData(){
+    const res = await axios.post('/api/warning/get');
+    this.setState({
+      list:res.data.content.info_list
+    })
+    console.log(res.data.content.info_list,'warn');
+  }
+
   showModal() {
     this.setState({ visible: true })
   }
@@ -46,7 +55,6 @@ class Warning extends React.Component {
         title: 'CO2',
         dataIndex: 'CO2',
         key: 'CO2',
-        render: text => <a>{text}</a>,
       },
       {
         title: 'Temperature',
@@ -61,7 +69,7 @@ class Warning extends React.Component {
       {
         title: 'Body temperature',
         dataIndex: 'bodytemperature',
-        key: 'body temperature',
+        key: 'bodytemperature',
       },
       {
         title: 'Action',
@@ -101,7 +109,7 @@ class Warning extends React.Component {
       >  
         <h2>设置阈值 </h2>
         <Modal visible={visible} onOk={this.handleOk} onCancel={this.handleCancel}/>
-        <Table columns={columns} dataSource={data} onClick={this.showModal} pagination={false}/>
+        <Table columns={columns} dataSource={this.state.list} onClick={this.showModal} pagination={false}/>
         <br/><br/>
         <h2>实时监控</h2>
         <Row gutter={24}>

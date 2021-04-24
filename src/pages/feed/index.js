@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react'
 import List from './components/List'
 import Filter from './components/Filter'
 import Modal from './components/Modal'
+import axios from 'axios'
 
 // @connect(({ farm, loading }) => ({ farm, loading }))
 class Feed extends React.Component {
@@ -29,7 +30,7 @@ class Feed extends React.Component {
     return(
     <div>
       <Filter onClick={this.showModal}/>
-      <List onClick={this.showModal}/>
+      <List onClick={this.showModal}  />
       <Modal visible={visible} onOk={this.handleOk} onCancel={this.handleCancel}/>
 
       </div>) 
