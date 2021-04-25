@@ -35,11 +35,13 @@ class Feed extends React.Component {
   submitEdit = async(data) => {
     console.log(data)
   const result = await axios.post('/api/feed/update', {
+    info:{
       project: data.project,
       time: data.time,
       animal: data.animal,
       feed: data.feed,
-      id: this.state.current.id
+    },
+      feed_id: this.state.current.id
     })
     this.getTableData()
     this.setState({ visible: false, type:1,current:{} })
@@ -68,7 +70,7 @@ class Feed extends React.Component {
     this.setState({ visible: false })
   }
   render() {
-    const { visible, list ,type,current } = this.state
+    const { visible, list ,type,current } = this.state;
     return(
     <div>
       <Filter onClick={this.showModal} onChange={this.getTableData}/>

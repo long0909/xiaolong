@@ -15,6 +15,7 @@ import {
 } from '@ant-design/icons'
 
 export default {
+
   'pay-circle-o': <PayCircleOutlined />,
   'shopping-cart': <ShoppingCartOutlined />,
   'camera-o': <CameraOutlined />,

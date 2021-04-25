@@ -18,7 +18,7 @@ class List extends React.Component {
   cancel() {}
   async ok(values) {
     console.log(values)
-    const result = await axios.post('/api/farm/delete', { id: values.id * 1 })
+    const result = await axios.post('/api/farm/delete', { farm_id: values.id * 1 })
     this.props.getTableData()
   }
 

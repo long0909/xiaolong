@@ -14,18 +14,27 @@ class List extends React.Component {
     }
   }
   //当组件输出到 DOM 后会执行 componentDidMount()
+  componentWillReceiveProps(nextProps){
+    const {  list } = nextProps;
+    this.setState({
+      list
+    })
+  }
   cancel() {}
   async ok(values) {
     console.log(values)
-    result = await axios.post('/api/feed/delete', { feed_id: values.id * 1 })
-    this.getTableData()
+    await axios.post('/api/feed/delete', { feed_id: values.id * 1 })
+    this.props.getTableData()
   }
-   onChange = async (checked) => {
+   onChange = async (checked,id) => {
     console.log(`switch to ${checked}`)
     const result = await axios.post('/api/feed/update', {
-      close_status: checked ? 1 : 0,
+      feed_id:id,
+      info:{
+        close_status: checked ? 0 : 1,
+      },
     })
-    this.getTableData()
+    this.props.getTableData()
   }
  async getTableData() {
     const res = await axios.post('/api/feed/list')
@@ -69,7 +78,7 @@ class List extends React.Component {
       {
         title: 'Action',
         key: 'action',
-        render: (text, record) => (
+        render: (text, record,index) => (
           <Space size="middle">
             <a
               onClick={() => {
@@ -89,7 +98,7 @@ class List extends React.Component {
             >
               <a>Delete</a>
             </Popconfirm>
-            <Switch checked={record.close_status} onChange={this.onChange} />
+            <Switch checked={((this.state.list&&this.state.list[index].close_status)||record.close_status)==0?true:false} onChange={(value)=>{this.onChange(value,record.id)}} />
           </Space>
         ),
       },
@@ -97,7 +106,7 @@ class List extends React.Component {
 
     return (
       <>
-        <Table columns={columns} dataSource={this.props.list} />
+        <Table columns={columns} dataSource={this.state.list} />
       </>
     )
   }

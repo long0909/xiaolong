@@ -40,11 +40,13 @@ class Farm extends React.Component {
   submitEdit = async(data) => {
     console.log(data)
   const result = await axios.post('/api/farm/update', {
-      animal: data.animal,
-      gender: data.gender,
-      quantity: data.quantity,
-      area: data.area,
-      density: data.density,
+      info:{
+        animal: data.animal,
+        gender: data.gender,
+        quantity: data.quantity,
+        area: data.area,
+        density: data.density,
+      },
       id: this.state.current.id
     })
     this.getTableData()

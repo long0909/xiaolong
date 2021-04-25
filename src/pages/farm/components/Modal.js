@@ -58,10 +58,10 @@ onFinish = (formData)=>{
     const { visible,type} = this.props
     const { current,onCancel } = this.props;
     return (
-      <Modal visible = {visible} footer={ [] } onCancel={onCancel} destroyOnClose>{type}
+      <Modal visible = {visible} footer={ [] } onCancel={onCancel} destroyOnClose>
         <Form ref={this.formRef}  name="control-ref" onFinish={this.onFinish} layout="horizontal" >
           <FormItem name='animal' rules={[{ required: true }]}
-            label={t`Quantity`} hasFeedback {...formItemLayout}>
+            label={t`Animal`} hasFeedback {...formItemLayout}>
             <Input />
           </FormItem>
           <FormItem name='gender' rules={[{ required: true }]}
@@ -88,8 +88,10 @@ onFinish = (formData)=>{
             <Input />
           </FormItem>
           <FormItem >
-            <Button type="primary" htmlType="submit" >submit</Button>
+          <div style={{width:"100%",display:"flex",justifyContent:"center"}}>
+            <Button type="primary" htmlType="submit" style={{marginRight:"50px"}}>submit</Button>
             <Button type="ghost" htmlType="submit" onClick={onCancel} >cancel</Button>
+          </div>
           </FormItem>
           </Form>
       </Modal>

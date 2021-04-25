@@ -24,7 +24,7 @@ class NumberCard extends React.Component{
         </span>
         <div className={styles.content}>
           <p className={styles.title}>{title || 'No Title'}</p>
-          <p className={dbData*1>=number*1?styles.number1:styles.number}>
+          <p className={dbData*1<number*1?styles.number1:styles.number}>
             <CountUp
               start={0}
               end={number}
